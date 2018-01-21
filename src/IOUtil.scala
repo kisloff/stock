@@ -46,14 +46,6 @@ object IOUtil {
   }
 
 
-
-//  def printOrders (orders : mutable.Queue[Order]) : Unit = {
-//    println("orders")
-//    orders.foreach {
-//      println
-//    }
-//  }
-
   def writeResultsToFile (accounts: mutable.HashSet[Account]) : Unit = {
     val fw = new FileWriter("result.txt", true)
 

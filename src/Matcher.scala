@@ -1,6 +1,7 @@
 import model.{Account, Order}
 
 import scala.collection.mutable
+import util.control.Breaks.{break, breakable}
 
 
 /**
@@ -22,6 +23,12 @@ object Matcher {
 
   def processOrders (accounts: mutable.HashSet[Account], orders : mutable.Queue[Order]): Unit ={
     fillQueues(orders)
+
+    matchOrders(bidA, askA, accounts)
+    matchOrders(bidB, askB, accounts)
+    matchOrders(bidC, askC, accounts)
+    matchOrders(bidD, askD, accounts)
+
   }
 
   def fillQueues(orders : mutable.Queue[Order]) = {
@@ -43,5 +50,32 @@ object Matcher {
     }
   }
 
+  def matchOrders(buy : mutable.Queue[Order], sell : mutable.Queue[Order], accounts : mutable.HashSet[Account]) = {
+    for(orderBuy <- buy){
+      for(orderSell <- sell){
+        breakable {if(orderBuy == orderSell) break}
+        if(orderBuy.price == orderSell.price && orderBuy.qty == orderSell.qty){
+          val dollar = orderBuy.price
+          val qty = orderBuy.qty
 
+          val seller = orderSell.clientName
+          val buyer = orderBuy.clientName
+
+          updateAccounts(accounts, seller, dollar, qty)
+          updateAccounts(accounts, seller, dollar, qty)
+
+          buy.dequeue();
+          sell.dequeue();
+        }
+      }
+    }
+  }
+
+  def updateAccounts (account : mutable.HashSet[Account], trader : String, dollar : Int, qty : Int): Unit = {
+
+  }
+
+  def areOrdersEqual(bidOrder : Order, askOrder : Order) : Boolean = {
+    if (bidOrder.equals(askOrder)) true else false
+  }
 }
