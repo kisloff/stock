@@ -19,7 +19,9 @@ object IOUtil {
   }
 
   def fillClientAccounts (accounts: mutable.HashMap[String, Account]) : Unit = {
-    val filename = "/Users/kv/ConsoleProjects/Maven/stock/src/main/resources/clients.txt"
+
+    //val filename = "clients.txt"
+    val filename = getClass.getClassLoader.getResource("clients.txt").getPath
 
     for (line <- Source.fromFile(filename).getLines) {
 
@@ -32,7 +34,10 @@ object IOUtil {
   }
 
   def fillOrders (orders : mutable.Queue[Order]) : Unit = {
-    val filename = "/Users/kv/ConsoleProjects/Maven/stock/src/main/resources/orders.txt"
+
+    //val filename = "orders.txt"
+    val filename = getClass.getClassLoader.getResource("orders.txt").getPath
+
     for (line <- Source.fromFile(filename).getLines) {
 
       val tmp: Array[String] = line.split("\t")
@@ -45,11 +50,10 @@ object IOUtil {
     }
   }
 
-
   def writeResultsToFile (accounts: mutable.HashMap[String, Account]) : Unit = {
-    val fw = new FileWriter("/Users/kv/ConsoleProjects/Maven/stock/src/main/resources/result.txt", true)
+    val filename = "result.txt"
 
-    accounts.values
+    val fw = new FileWriter(filename, true)
 
     for (elem <- ListMap(accounts.toSeq.sortBy(_._1):_*).values) {
         fw.write(elem.toString + "\n")
