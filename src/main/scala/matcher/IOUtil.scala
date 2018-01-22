@@ -1,3 +1,5 @@
+package matcher
+
 import java.io.FileWriter
 
 import model.{Account, Order}
@@ -17,7 +19,7 @@ object IOUtil {
   }
 
   def fillClientAccounts (accounts: mutable.HashMap[String, Account]) : Unit = {
-    val filename = "/Users/kv/ConsoleProjects/Maven/stock/resources/clients.txt"
+    val filename = "/Users/kv/ConsoleProjects/Maven/stock/src/main/resources/clients.txt"
 
     for (line <- Source.fromFile(filename).getLines) {
 
@@ -30,7 +32,7 @@ object IOUtil {
   }
 
   def fillOrders (orders : mutable.Queue[Order]) : Unit = {
-    val filename = "/Users/kv/ConsoleProjects/Maven/stock/resources/orders.txt"
+    val filename = "/Users/kv/ConsoleProjects/Maven/stock/src/main/resources/orders.txt"
     for (line <- Source.fromFile(filename).getLines) {
 
       val tmp: Array[String] = line.split("\t")
@@ -45,7 +47,7 @@ object IOUtil {
 
 
   def writeResultsToFile (accounts: mutable.HashMap[String, Account]) : Unit = {
-    val fw = new FileWriter("result.txt", true)
+    val fw = new FileWriter("/Users/kv/ConsoleProjects/Maven/stock/src/main/resources/result.txt", true)
 
     accounts.values
 
