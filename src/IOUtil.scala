@@ -10,31 +10,31 @@ import scala.io.Source
   */
 object IOUtil {
 
-  def setUp (accounts: mutable.HashSet[Account], orders : mutable.Queue[Order]) : Unit = {
+  def setUp (accounts: mutable.HashMap[String, Account], orders : mutable.Queue[Order]) : Unit = {
     fillClientAccounts(accounts)
     fillOrders(orders)
   }
 
-  def fillClientAccounts (accounts: mutable.HashSet[Account]) : Unit = {
+  def fillClientAccounts (accounts: mutable.HashMap[String, Account]) : Unit = {
     val filename = "/Users/kv/ConsoleProjects/Maven/stock/resources/clients.txt"
-    println("accounts")
+    //println("accounts")
     for (line <- Source.fromFile(filename).getLines) {
-      println(line)
+      //println(line)
 
       val tmp: Array[String] = line.split("\t")
 
       val tmpClient = new Account(tmp(0), tmp(1).toInt, tmp(2).toInt, tmp(3).toInt, tmp(4).toInt, tmp(5).toInt)
 
-      accounts += tmpClient
+      accounts.put(tmp(0), tmpClient)
     }
   }
 
   def fillOrders (orders : mutable.Queue[Order]) : Unit = {
     val filename = "/Users/kv/ConsoleProjects/Maven/stock/resources/orders.txt"
-    println("orders")
+    //println("orders")
     for (line <- Source.fromFile(filename).getLines) {
 
-      println(line)
+      //println(line)
       val tmp: Array[String] = line.split("\t")
 
       val tmpPrice = tmp(3).toInt
@@ -46,7 +46,7 @@ object IOUtil {
   }
 
 
-  def writeResultsToFile (accounts: mutable.HashSet[Account]) : Unit = {
+  def writeResultsToFile (accounts: mutable.HashMap[String, Account]) : Unit = {
     val fw = new FileWriter("result.txt", true)
 
     val accList = accounts.toList
