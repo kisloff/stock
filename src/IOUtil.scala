@@ -2,6 +2,7 @@ import java.io.FileWriter
 
 import model.{Account, Order}
 
+import scala.collection.immutable.ListMap
 import scala.collection.mutable
 import scala.io.Source
 
@@ -17,9 +18,8 @@ object IOUtil {
 
   def fillClientAccounts (accounts: mutable.HashMap[String, Account]) : Unit = {
     val filename = "/Users/kv/ConsoleProjects/Maven/stock/resources/clients.txt"
-    //println("accounts")
+
     for (line <- Source.fromFile(filename).getLines) {
-      //println(line)
 
       val tmp: Array[String] = line.split("\t")
 
@@ -31,10 +31,8 @@ object IOUtil {
 
   def fillOrders (orders : mutable.Queue[Order]) : Unit = {
     val filename = "/Users/kv/ConsoleProjects/Maven/stock/resources/orders.txt"
-    //println("orders")
     for (line <- Source.fromFile(filename).getLines) {
 
-      //println(line)
       val tmp: Array[String] = line.split("\t")
 
       val tmpPrice = tmp(3).toInt
@@ -49,12 +47,10 @@ object IOUtil {
   def writeResultsToFile (accounts: mutable.HashMap[String, Account]) : Unit = {
     val fw = new FileWriter("result.txt", true)
 
-    val accList = accounts.toList
+    accounts.values
 
-    for (elem <- accList) {
-      try {
+    for (elem <- ListMap(accounts.toSeq.sortBy(_._1):_*).values) {
         fw.write(elem.toString + "\n")
-      }
     }
     fw.close()
   }

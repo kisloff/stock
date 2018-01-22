@@ -55,14 +55,8 @@ object Matcher {
     for(orderBuy <- buy){
       if(buy.isEmpty || sell.isEmpty) break()
 
-      sell.filter(== )
-
       for (orderSell <- sell) {
-//        print(sell.size + " ")
         if(sell.isEmpty) break()
-//          breakable {
-//            if (orderBuy == orderSell) break
-//          }
           if (orderBuy.price == orderSell.price && orderBuy.qty == orderSell.qty && orderBuy.isProcessed == false && orderSell.isProcessed == false) {
             val dollar = orderBuy.price
             val qty = orderBuy.qty
