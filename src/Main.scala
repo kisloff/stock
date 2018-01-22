@@ -7,9 +7,7 @@ import scala.collection.mutable
   */
 object Main extends App {
 
-  println("Hello world from Scala!")
-
-  var accounts = mutable.HashSet[Account]()
+  var accounts = mutable.HashMap[String, Account]()
   var orders = new mutable.Queue[Order]()
 
   IOUtil.setUp(accounts, orders)

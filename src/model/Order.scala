@@ -6,8 +6,9 @@ class Order (val clientName : String,
              val operation : String,
              val currency : String,
              val price : Int,
-             val qty : Int) {
+             val qty : Int,
+            var isProcessed  : Boolean = false) {
 
   override def toString: String =
-    clientName + "\t"  + operation + "\t" + currency + "\t"+ price + "\t"+ qty
+    clientName + "\t"  + operation + "\t" + currency + "\t"+ price + "\t"+ qty + "\t"+ isProcessed
 }

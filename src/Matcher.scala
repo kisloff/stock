@@ -21,7 +21,7 @@ object Matcher {
   var bidD = new mutable.Queue[Order]()
   var askD = new mutable.Queue[Order]()
 
-  def processOrders (accounts: mutable.HashSet[Account], orders : mutable.Queue[Order]): Unit ={
+  def processOrders (accounts: mutable.HashMap[String, Account], orders : mutable.Queue[Order]): Unit ={
     fillQueues(orders)
 
     matchOrders(bidA, askA, accounts)
@@ -50,29 +50,61 @@ object Matcher {
     }
   }
 
-  def matchOrders(buy : mutable.Queue[Order], sell : mutable.Queue[Order], accounts : mutable.HashSet[Account]) = {
+  def matchOrders(buy : mutable.Queue[Order], sell : mutable.Queue[Order], accounts : mutable.HashMap[String, Account]) = {
+    breakable {
     for(orderBuy <- buy){
-      for(orderSell <- sell){
-        breakable {if(orderBuy == orderSell) break}
-        if(orderBuy.price == orderSell.price && orderBuy.qty == orderSell.qty){
-          val dollar = orderBuy.price
-          val qty = orderBuy.qty
+      if(buy.isEmpty || sell.isEmpty) break()
 
-          val seller = orderSell.clientName
-          val buyer = orderBuy.clientName
+      sell.filter(== )
 
-          updateAccounts(accounts, seller, dollar, qty)
-          updateAccounts(accounts, seller, dollar, qty)
+      for (orderSell <- sell) {
+//        print(sell.size + " ")
+        if(sell.isEmpty) break()
+//          breakable {
+//            if (orderBuy == orderSell) break
+//          }
+          if (orderBuy.price == orderSell.price && orderBuy.qty == orderSell.qty && orderBuy.isProcessed == false && orderSell.isProcessed == false) {
+            val dollar = orderBuy.price
+            val qty = orderBuy.qty
 
-          buy.dequeue();
-          sell.dequeue();
+            val seller = orderSell.clientName
+            val buyer = orderBuy.clientName
+
+            val currencyType = orderSell.currency
+
+            updateSellerAccount(accounts, seller, dollar, qty, currencyType)
+            updateBuyerAccount(accounts, buyer, dollar, qty, currencyType)
+
+            orderBuy.isProcessed = true;
+            orderSell.isProcessed = true;
+          }
         }
       }
     }
   }
 
-  def updateAccounts (account : mutable.HashSet[Account], trader : String, dollar : Int, qty : Int): Unit = {
+  def updateSellerAccount (account : mutable.HashMap[String, Account], trader : String, dollar : Int, qty : Int, currencyType : String): Unit = {
+    val x = account(trader)
+    x.dollarBalance+=dollar
 
+    currencyType match  {
+      case "A" => x.aBalance -= qty
+      case "B" => x.bBalance -= qty
+      case "C" => x.cBalance -= qty
+      case "D" => x.dBalance -= qty
+    }
+  }
+
+  def updateBuyerAccount (account : mutable.HashMap[String, Account], trader : String, dollar : Int, qty : Int, currencyType : String): Unit = {
+    val x = account(trader)
+    x.dollarBalance-=dollar
+
+    currencyType match  {
+      case "A" => x.aBalance += qty
+      case "B" => x.bBalance += qty
+      case "C" => x.cBalance += qty
+      case "D" => x.dBalance += qty
+    }
   }
 
   def areOrdersEqual(bidOrder : Order, askOrder : Order) : Boolean = {
