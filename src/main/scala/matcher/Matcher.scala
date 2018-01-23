@@ -102,8 +102,4 @@ object Matcher {
       case "D" => x.dBalance += qty
     }
   }
-
-  def areOrdersEqual(bidOrder : Order, askOrder : Order) : Boolean = {
-    if (bidOrder.equals(askOrder)) true else false
-  }
 }
